@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Edit User {{user.first_name}}{% endblock %}
+
+{% block content %}
+
+<form action='/confirm_edit{{user.id}}', method='POST'>
+    <input type="text" name='first_name' placeholder={{user.first_name}}>
+    <input type='text' name='last_name' placeholder={{user.last_name}}>
+    <input type='text' name='url' placeholder={{user.image_url}}>
+    <br>
+    <button>Confirm Change</button>
+</form>
+<form action='/{{user.id}}'>
+    <button>Go Back</button>
+</form>
+
+{% endblock %}
