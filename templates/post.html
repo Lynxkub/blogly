@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Post {{post.id}}{% endblock %}
+
+
+{% block content %}
+<h1>{{post.title}}</h1>
+<p>{{post.content}}</p>
+<form>
+<button formaction='/edit_post{{post.id}}'>Edit Post</button>
+</form>
+<form action='/delete_post{{post.id}}' method='POST'>
+<button formaction='/delete_post{{post.id}}' method='POST'>Delete Post</button>
+</form>
+<footer>Created at {{timestamp}}</footer>
+{% endblock %}

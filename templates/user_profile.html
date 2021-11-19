@@ -9,6 +9,13 @@
 <span>
     <h3>{{user.first_name}} {{user.last_name}}</h3>
 </span>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <h4>{{message}}</h4>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 <form action='/users/{{user.id}}/edit', method='POST'>
 <button>Edit User</button>
 </form>
@@ -17,5 +24,15 @@
 </form>
 <form action='/users'>
     <button>Back to User List</button>
+</form>
+
+<h4>Posts</h4>
+<ul>
+    {%for post in posts %}
+    <li><a href='/post{{post.id}}'>{{post.title}}</a></li>
+    {% endfor %}
+</ul>
+<form action='/add_post{{user.id}}'>
+    <button>Add Post</button>
 </form>
 {% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Create New Post{% endblock %}
+
+
+{% block content %}
+<h1>Create Post for {{user.first_name}} {{user.last_name}}</h1>
+<form method='POST'>
+    
+    <label>Title</label>
+    <input type='text' name='post_title'>
+    
+    <br>
+    <label>Content</label>
+    <textarea rows='5' cols='80' name='post_content'></textarea>
+    <button formaction='/successful_post_created{{user.id}}'>Create Post</button>
+    <button formaction='/{{user.id}}'>Go Back</button>
+</form>
+{% endblock %}

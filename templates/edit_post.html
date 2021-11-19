@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Post{% endblock %}
+
+
+{% block content %}
+<form action='/submit_edit{{post.id}}' method='POST'>
+    <label>Title</label>
+    <input type='text' name='edit'>
+    <br>
+    <label>Content</label>
+    <textarea rows='5' cols='80' name='content_edit' ></textarea>
+    <button>Submit My Change</button>
+</form>
+
+{% endblock %}
