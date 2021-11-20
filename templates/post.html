@@ -11,6 +11,16 @@
 </form>
 <form action='/delete_post{{post.id}}' method='POST'>
 <button formaction='/delete_post{{post.id}}' method='POST'>Delete Post</button>
+<br>
+<button formaction='/users'>Return To Home Page</button>
 </form>
-<footer>Created at {{timestamp}}</footer>
+<footer>
+    Tags:
+    {% for tag in post.tags %}
+    <a href='/tag_list{{tag.id}}'>{{tag}}</a>
+    {% endfor %}
+    <br>
+    Created by <a href='/{{post.users.id}}'>{{first_name}} {{last_name}}</a> at {{timestamp}}
+</footer>
+
 {% endblock %}

@@ -1,7 +1,7 @@
 from weakref import ProxyTypes
 from flask import Flask, render_template, flash, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 from datetime import datetime
 
 app=Flask(__name__)
@@ -23,14 +23,14 @@ now=datetime.now()
 def home_page():
     return redirect ('/users')
 
-@app.route('/users')
+@app.route('/users', methods=['GET','POST'])
 def users_page():
 
     users=User.query.all()
+    tags=Tag.query.all()
+    return render_template('users.html', users=users, tags=tags)
 
-    return render_template('users.html', users=users)
-
-@app.route('/users', methods=['POST'])
+@app.route('/user_added', methods=['POST'])
 def new_user_created():
     first_name=request.form['first_name']
     last_name=request.form['last_name']
@@ -99,15 +99,19 @@ def confirm_edit(user_id):
 def add_post(user_id):
 
     user=User.query.get(user_id)
-    return render_template('create_post.html', user=user)
+    tags=Tag.query.all()
+    return render_template('create_post.html', user=user, tags=tags)
     
 @app.route('/successful_post_created<int:user_id>', methods=['POST'])
 def post_created(user_id):
     user=User.query.get(user_id)
     title=request.form['post_title']
     content=request.form['post_content']
+
+    tag_ids = [int(num) for num in request.form.getlist("tags")]
+    tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
     
-    new_post=Post(title=title, content=content, created_at=now, user_id=user.id)
+    new_post=Post(title=title, content=content, created_at=now, user_id=user.id, tags=tags)
     db.session.add(new_post)
     db.session.commit()
     flash('Post Created!')
@@ -118,7 +122,12 @@ def post_link(post_id):
     post=Post.query.get(post_id)
     time=post.created_at
     readable_time=time.strftime("%d/%m/%Y %H:%M:%S")
-    return render_template('post.html', post=post, timestamp=readable_time)
+    user_id=post.user_id
+    id=User.query.get(user_id)
+    first_name=id.first_name
+    last_name=id.last_name
+    tag=Tag.query.filter
+    return render_template('post.html', post=post, timestamp=readable_time, first_name=first_name, last_name=last_name, id=id)
 
 
 @app.route('/edit_post<int:post_id>')
@@ -148,3 +157,27 @@ def delete_post(post_id):
     db.session.commit()
 
     return redirect('/users')
+
+@app.route('/add_tag')
+def add_tag():
+
+    return render_template('add_tag.html')
+
+@app.route('/successful_tag_added', methods=['POST'])
+def tag_added():
+    tag_name=request.form['tag_name']
+    tag=Tag(name=tag_name)
+    db.session.add(tag)
+    db.session.commit()
+    flash('Tag Created Successfully!')
+    return redirect('/users')
+
+@app.route('/tag_list<int:tag_id>')
+def tag_list(tag_id):
+    tag_list=Tag.query.get(tag_id)
+
+    return render_template('tag_page.html', tag_list=tag_list)
+
+
+
+  

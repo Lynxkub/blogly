@@ -22,4 +22,14 @@
 
 <a href='/users/new'>Add New User</a>
 
+<h3>Tags</h3>
+<ul>
+    {% for tag in tags %}
+    <li><a href='/tag_list{{tag.id}}'>{{tag.name}}</a></li>
+    {% endfor %}
+</ul>
+<form action='/add_tag'>
+    <button>Add New Tag</button>
+</form>
+
 {% endblock %}

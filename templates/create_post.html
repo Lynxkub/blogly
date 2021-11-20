@@ -13,7 +13,17 @@
     <br>
     <label>Content</label>
     <textarea rows='5' cols='80' name='post_content'></textarea>
+    <br>
+        {% for tag in tags %}
+        
+            
+            <input type='checkbox' name='tags' value={{tag.id}}>
+            <label>{{tag.name}}</label>
+        
+        {% endfor %}
+    
     <button formaction='/successful_post_created{{user.id}}'>Create Post</button>
     <button formaction='/{{user.id}}'>Go Back</button>
 </form>
+
 {% endblock %}

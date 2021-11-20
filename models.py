@@ -49,3 +49,40 @@ class Post(db.Model):
 
     def __repr__(self):
         return f'<Post {self.id} {self.title} {self.created_at}>'
+
+    # post_tag = db.relationship('tags', backref = 'post')
+class Tag(db.Model):
+    """Creates a tag for similar blogs"""
+
+    __tablename__='tags'
+
+    id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True)
+
+    name = db.Column(db.Text,
+                    unique=True)
+
+    def __repr__(self):
+        return f'{self.name}'
+
+    posts = db.relationship('Post', secondary='posttags', backref='tags')
+class PostTag(db.Model):
+    """Joins a post with a tag"""
+
+    __tablename__='posttags'
+
+    post_id = db.Column(db.Integer,
+                        db.ForeignKey('posts.id'),
+                        primary_key=True,
+                        nullable=False)
+    
+    tag_id = db.Column(db.Integer,
+                        db.ForeignKey('tags.id'),
+                        primary_key=True,
+                        nullable=False)
+
+    
+
+    def __rept__(self):
+        return f'{self.tag_id}'    
